@@ -1,0 +1,10 @@
+diff -Nur ../hitch-00b264b5537986fecfa1013cc27ad3b7b771a646.orig/tests/test07-nomatch-abort ./tests/test07-nomatch-abort
+--- ../hitch-00b264b5537986fecfa1013cc27ad3b7b771a646.orig/tests/test07-nomatch-abort	2015-06-18 12:01:42.000000000 +0200
++++ ./tests/test07-nomatch-abort	2015-06-25 16:54:31.635809295 +0200
+@@ -30,5 +30,4 @@
+ grep -q -c "unrecognized name" $DUMPFILE
+ test "$?" = "0" || die "Expected 'unrecognized name' error."
+ 
+-CURL_EXTRA="--resolve site1.example.com:$LISTENPORT:127.0.0.1"
+-runcurl site1.example.com $LISTENPORT
++(echo -e 'GET / HTTP/1.0\nHost: site1.example.com\n'; sleep 1) | openssl s_client -connect $LISTENADDR:$LISTENPORT > $DUMPFILE 2>&1
