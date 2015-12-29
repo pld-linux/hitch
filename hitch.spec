@@ -16,10 +16,10 @@ Patch3:		%{name}-1.0.1_tests_nobody_group.patch
 Patch4:		%{name}.test07_missing_curl_resolve_on_el6.patch
 Patch5:		%{name}-1.1.0_stronger_ciphers.e7be033.patch
 URL:		https://hitch-tls.org/
-BuildRequires:	libev-devel
+BuildRequires:	libev-devel >= 4
 BuildRequires:	libtool
 BuildRequires:	openssl
-BuildRequires:	openssl-devel
+BuildRequires:	openssl-devel >= 1.0.0
 BuildRequires:	rpmbuild(macros) >= 1.647
 Requires(post,preun):	/sbin/chkconfig
 Requires(post,preun,postun):	systemd-units >= 38
