@@ -29,8 +29,8 @@ diff -Naur ../hitch-00b264b5537986fecfa1013cc27ad3b7b771a646.orig/hitch.initrc.r
 +pidfile="/var/run/hitch/hitch.pid"
 +lockfile="/var/lock/subsys/hitch"
 +config="/etc/hitch/hitch.conf"
-+exec="/usr/sbin/hitch-openssl"
-+prog="hitch-openssl"
++exec="/usr/sbin/hitch"
++prog="hitch"
 +
 +
 +start() {

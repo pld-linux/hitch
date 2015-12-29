@@ -1,0 +1,22 @@
+From e7be0333a6f50188bd3f8649a1ea77be7ddeda95 Mon Sep 17 00:00:00 2001
+From: Lasse Karstensen <lkarsten@varnish-software.com>
+Date: Mon, 23 Nov 2015 14:29:32 +0100
+Subject: [PATCH] Use recommended cipher list in example config.
+
+---
+ hitch.conf.ex | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/hitch.conf.ex b/hitch.conf.ex
+index d76a1c2..d47523a 100644
+--- a/hitch.conf.ex
++++ b/hitch.conf.ex
+@@ -32,7 +32,7 @@ pem-file = ""
+ #
+ # Run openssl ciphers for list of available ciphers.
+ # type: string
+-ciphers = ""
++ciphers = "EECDH+AESGCM:EDH+AESGCM:AES256+EECDH:AES256+EDH"
+ 
+ # Enforce server cipher list order
+ #

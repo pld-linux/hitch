@@ -2,23 +2,20 @@
 # Conditional build:
 %bcond_with	tests		# run tests. needs internet connection
 
-%define	commit		b1ee595d7803dbdd403b554eb4ec0416d00efeb3
-%define	shortcommit	%(c=%{commit}; echo ${c:0:7})
-
 Summary:	Network proxy that terminates TLS/SSL connections
 Name:		hitch
-Version:	1.0.0
-Release:	0.4.3.beta4
+Version:	1.1.0
+Release:	1
 License:	BSD
 Group:		Daemons
-Source0:	https://github.com/varnish/hitch/archive/%{commit}/%{name}-%{commit}.tar.gz
-# Source0-md5:	05184c997ddf1d167ae15adfbc9195e5
+Source0:	https://hitch-tls.org/source/%{name}-%{version}.tar.gz
+# Source0-md5:	f8b916e8739f55432ec8af5146e522ed
 Patch0:		%{name}.systemd.service.patch
 Patch1:		%{name}.initrc.redhat.patch
-Patch3:		%{name}.clean_test_processes.patch
+Patch3:		%{name}-1.0.1_tests_nobody_group.patch
 Patch4:		%{name}.test07_missing_curl_resolve_on_el6.patch
-Patch5:		%{name}-1.0.0-beta4.syslog.patch
-URL:		https://github.com/varnish/hitch
+Patch5:		%{name}-1.1.0_stronger_ciphers.e7be033.patch
+URL:		https://hitch-tls.org/
 BuildRequires:	libev-devel
 BuildRequires:	libtool
 BuildRequires:	openssl
@@ -43,7 +40,7 @@ handle 10s of thousands of connections efficiently on multicore
 machines.
 
 %prep
-%setup -qn %{name}-%{commit}
+%setup -q
 %patch0
 %patch1
 %patch3
@@ -51,16 +48,15 @@ machines.
 %patch5 -p1
 
 %build
-./bootstrap
 CFLAGS="%{rpmcflags} -fPIE"
 LDFLAGS="-pie"
 CPPFLAGS="-I%{_includedir}/libev"
 %configure
 %{__make}
-sed -i 's/nogroup/nobody/g' tests/configs/test08*.cfg
 
 %if %{with tests}
-cd tests; ./runtests
+cd src/tests
+./runtests
 %endif
 
 %install
@@ -68,12 +64,14 @@ rm -rf $RPM_BUILD_ROOT
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
 
-$RPM_BUILD_ROOT%{_sbindir}/hitch-openssl --default-config | sed '
+%{__rm} -r $RPM_BUILD_ROOT%{_docdir}/%{name}
+
+sed '
 	s/user = ""/user = "%{hitch_user}"/g;
 	s/group = ""/group = "%{hitch_group}"/g;
 	s/backend = "\[127.0.0.1\]:8000"/backend = "[127.0.0.1]:6081"/g;
 	s/syslog = off/syslog = on/g;
-	' > hitch.conf
+	' hitch.conf.ex > hitch.conf
 	sed -i 's/daemon = off/daemon = on/g;' hitch.conf
 
 install -p -D hitch.conf $RPM_BUILD_ROOT%{_sysconfdir}/%{name}/hitch.conf
@@ -111,11 +109,11 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%doc README.md LICENSE
+%doc README.md LICENSE CHANGES.rst hitch.conf.ex
 %dir %{_sysconfdir}/%{name}
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/%{name}/hitch.conf
 %attr(754,root,root) /etc/rc.d/init.d/hitch
-%attr(755,root,root) %{_sbindir}/hitch-openssl
+%attr(755,root,root) %{_sbindir}/hitch
 %{_mandir}/man8/hitch.8*
 %{systemdunitdir}/hitch.service
 %{systemdtmpfilesdir}/hitch.conf

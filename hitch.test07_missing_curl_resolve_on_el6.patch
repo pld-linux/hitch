@@ -1,6 +1,6 @@
-diff -Nur ../hitch-00b264b5537986fecfa1013cc27ad3b7b771a646.orig/tests/test07-nomatch-abort ./tests/test07-nomatch-abort
---- ../hitch-00b264b5537986fecfa1013cc27ad3b7b771a646.orig/tests/test07-nomatch-abort	2015-06-18 12:01:42.000000000 +0200
-+++ ./tests/test07-nomatch-abort	2015-06-25 16:54:31.635809295 +0200
+diff -x cc2a776f -Naur ../hitch-adca8d96fa16de1f2e66717ec2b7c95b772a1204.orig/src/tests/test07-nomatch-abort ./src/tests/test07-nomatch-abort
+--- ../hitch-adca8d96fa16de1f2e66717ec2b7c95b772a1204.orig/src/tests/test07-nomatch-abort	2015-08-17 11:46:16.000000000 +0200
++++ ./src/tests/test07-nomatch-abort	2015-08-17 13:44:50.630148835 +0200
 @@ -30,5 +30,4 @@
  grep -q -c "unrecognized name" $DUMPFILE
  test "$?" = "0" || die "Expected 'unrecognized name' error."

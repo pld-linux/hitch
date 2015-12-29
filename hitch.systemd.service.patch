@@ -23,7 +23,7 @@ diff -Naur ../hitch-00b264b5537986fecfa1013cc27ad3b7b771a646.orig/hitch.service 
 +
 +Type=simple
 +PrivateTmp=true
-+ExecStart=/usr/sbin/hitch-openssl --pidfile=/run/hitch/hitch.pid --config=/etc/hitch/hitch.conf
++ExecStart=/usr/sbin/hitch --pidfile=/run/hitch/hitch.pid --config=/etc/hitch/hitch.conf
 +
 +
 +[Install]
