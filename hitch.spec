@@ -4,17 +4,14 @@
 
 Summary:	Network proxy that terminates TLS/SSL connections
 Name:		hitch
-Version:	1.1.0
+Version:	1.4.1
 Release:	1
 License:	BSD
 Group:		Daemons
 Source0:	https://hitch-tls.org/source/%{name}-%{version}.tar.gz
-# Source0-md5:	f8b916e8739f55432ec8af5146e522ed
+# Source0-md5:	111913964c35bb6ef41474273e0b6755
 Patch0:		%{name}.systemd.service.patch
 Patch1:		%{name}.initrc.redhat.patch
-Patch3:		%{name}-1.0.1_tests_nobody_group.patch
-Patch4:		%{name}.test07_missing_curl_resolve_on_el6.patch
-Patch5:		%{name}-1.1.0_stronger_ciphers.e7be033.patch
 URL:		https://hitch-tls.org/
 BuildRequires:	libev-devel >= 4
 BuildRequires:	libtool
@@ -43,9 +40,6 @@ machines.
 %setup -q
 %patch0
 %patch1
-%patch3
-%patch4
-%patch5 -p1
 
 %build
 CFLAGS="%{rpmcflags} -fPIE"
@@ -71,7 +65,7 @@ sed '
 	s/group = ""/group = "%{hitch_group}"/g;
 	s/backend = "\[127.0.0.1\]:8000"/backend = "[127.0.0.1]:6081"/g;
 	s/syslog = off/syslog = on/g;
-	' hitch.conf.ex > hitch.conf
+	' hitch.conf.example > hitch.conf
 	sed -i 's/daemon = off/daemon = on/g;' hitch.conf
 
 install -p -D hitch.conf $RPM_BUILD_ROOT%{_sysconfdir}/%{name}/hitch.conf
@@ -109,7 +103,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%doc README.md LICENSE CHANGES.rst hitch.conf.ex
+%doc README.md LICENSE CHANGES.rst hitch.conf.example
 %dir %{_sysconfdir}/%{name}
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/%{name}/hitch.conf
 %attr(754,root,root) /etc/rc.d/init.d/hitch
