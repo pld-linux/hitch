@@ -4,12 +4,12 @@
 
 Summary:	Network proxy that terminates TLS/SSL connections
 Name:		hitch
-Version:	1.4.1
+Version:	1.4.2
 Release:	1
 License:	BSD
 Group:		Daemons
 Source0:	https://hitch-tls.org/source/%{name}-%{version}.tar.gz
-# Source0-md5:	111913964c35bb6ef41474273e0b6755
+# Source0-md5:	65c5498005c10be3e03c09c76176acbf
 Patch0:		%{name}.systemd.service.patch
 Patch1:		%{name}.initrc.redhat.patch
 URL:		https://hitch-tls.org/
@@ -38,6 +38,7 @@ machines.
 
 %prep
 %setup -q
+cp -p hitch.conf.example hitch.conf
 %patch0
 %patch1
 
@@ -60,15 +61,8 @@ rm -rf $RPM_BUILD_ROOT
 
 %{__rm} -r $RPM_BUILD_ROOT%{_docdir}/%{name}
 
-sed '
-	s/user = ""/user = "%{hitch_user}"/g;
-	s/group = ""/group = "%{hitch_group}"/g;
-	s/backend = "\[127.0.0.1\]:8000"/backend = "[127.0.0.1]:6081"/g;
-	s/syslog = off/syslog = on/g;
-	' hitch.conf.example > hitch.conf
-	sed -i 's/daemon = off/daemon = on/g;' hitch.conf
-
-install -p -D hitch.conf $RPM_BUILD_ROOT%{_sysconfdir}/%{name}/hitch.conf
+install -d $RPM_BUILD_ROOT%{_sysconfdir}/%{name}
+cp -p hitch.conf $RPM_BUILD_ROOT%{_sysconfdir}/%{name}
 install -d $RPM_BUILD_ROOT%{hitch_homedir}
 install -d $RPM_BUILD_ROOT%{hitch_datadir}
 install -p -D hitch.service $RPM_BUILD_ROOT%{systemdunitdir}/hitch.service
@@ -108,6 +102,7 @@ rm -rf $RPM_BUILD_ROOT
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/%{name}/hitch.conf
 %attr(754,root,root) /etc/rc.d/init.d/hitch
 %attr(755,root,root) %{_sbindir}/hitch
+%{_mandir}/man5/hitch.conf.5*
 %{_mandir}/man8/hitch.8*
 %{systemdunitdir}/hitch.service
 %{systemdtmpfilesdir}/hitch.conf
