@@ -4,12 +4,12 @@
 
 Summary:	Network proxy that terminates TLS/SSL connections
 Name:		hitch
-Version:	1.4.2
+Version:	1.4.3
 Release:	1
 License:	BSD
 Group:		Daemons
 Source0:	https://hitch-tls.org/source/%{name}-%{version}.tar.gz
-# Source0-md5:	65c5498005c10be3e03c09c76176acbf
+# Source0-md5:	5499146a406865df2bdf2f7f477322aa
 Patch0:		%{name}.systemd.service.patch
 Patch1:		%{name}.initrc.redhat.patch
 URL:		https://hitch-tls.org/
@@ -45,7 +45,6 @@ cp -p hitch.conf.example hitch.conf
 %build
 CFLAGS="%{rpmcflags} -fPIE"
 LDFLAGS="-pie"
-CPPFLAGS="-I%{_includedir}/libev"
 %configure
 %{__make}
 
