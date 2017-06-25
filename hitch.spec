@@ -18,6 +18,7 @@ BuildRequires:	libev-devel >= 4
 BuildRequires:	libtool
 BuildRequires:	openssl
 BuildRequires:	openssl-devel >= 1.0.0
+BuildRequires:	pkgconfig
 BuildRequires:	rpmbuild(macros) >= 1.647
 %if %{with doc}
 BuildRequires:	docutils
@@ -106,8 +107,10 @@ rm -rf $RPM_BUILD_ROOT
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/%{name}/hitch.conf
 %attr(754,root,root) /etc/rc.d/init.d/hitch
 %attr(755,root,root) %{_sbindir}/hitch
+%if %{with doc}
 %{_mandir}/man5/hitch.conf.5*
 %{_mandir}/man8/hitch.8*
+%endif
 %{systemdunitdir}/hitch.service
 %{systemdtmpfilesdir}/hitch.conf
 %define	no_install_post_check_tmpfiles 1
