@@ -1,6 +1,7 @@
 #
 # Conditional build:
 %bcond_with	tests		# run tests. needs internet connection
+%bcond_without	doc		# build documentation (man page)
 
 Summary:	Network proxy that terminates TLS/SSL connections
 Name:		hitch
@@ -18,6 +19,9 @@ BuildRequires:	libtool
 BuildRequires:	openssl
 BuildRequires:	openssl-devel >= 1.0.0
 BuildRequires:	rpmbuild(macros) >= 1.647
+%if %{with doc}
+BuildRequires:	docutils
+%endif
 Requires(post,preun):	/sbin/chkconfig
 Requires(post,preun,postun):	systemd-units >= 38
 Requires:	rc-scripts
