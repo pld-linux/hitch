@@ -23,8 +23,16 @@ BuildRequires:	rpmbuild(macros) >= 1.647
 %if %{with doc}
 BuildRequires:	docutils
 %endif
+Provides:	group(hitch)
+Provides:	user(hitch)
 Requires(post,preun):	/sbin/chkconfig
 Requires(post,preun,postun):	systemd-units >= 38
+Requires(postun):	/usr/sbin/groupdel
+Requires(postun):	/usr/sbin/userdel
+Requires(pre):	/bin/id
+Requires(pre):	/usr/bin/getgid
+Requires(pre):	/usr/sbin/groupadd
+Requires(pre):	/usr/sbin/useradd
 Requires:	rc-scripts
 Requires:	systemd-units >= 0.38
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -79,12 +87,9 @@ touch $RPM_BUILD_ROOT%{_localstatedir}/run/hitch/hitch.pid
 %clean
 rm -rf $RPM_BUILD_ROOT
 
-%if 0
-# TODO: register uid/gid
 %pre
-%groupadd -r %{hitch_group}
-%useradd -r -g %{hitch_group} -s /sbin/nologin -d %{hitch_homedir} %{hitch_user}
-%endif
+%groupadd -g 334 %{hitch_group}
+%useradd -u 334 -g %{hitch_group} -s /sbin/nologin -d %{hitch_homedir} %{hitch_user}
 
 %post
 %systemd_post hitch.service
@@ -99,6 +104,10 @@ rm -rf $RPM_BUILD_ROOT
 
 %postun
 %systemd_postun_with_restart hitch.service
+if [ "$1" = "0" ]; then
+	%userremove %{hitch_user}
+	%groupremove %{hitch_group}
+fi
 
 %files
 %defattr(644,root,root,755)
