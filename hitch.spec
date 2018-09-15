@@ -6,7 +6,7 @@
 Summary:	Network proxy that terminates TLS/SSL connections
 Name:		hitch
 Version:	1.4.6
-Release:	1
+Release:	2
 License:	BSD
 Group:		Daemons
 Source0:	https://hitch-tls.org/source/%{name}-%{version}.tar.gz
