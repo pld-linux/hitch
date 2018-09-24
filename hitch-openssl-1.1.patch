@@ -1,0 +1,30 @@
+commit feb67119549125cbac78645c0f37fec6fc4aca9e
+Author: Lasse Karstensen <lasse.karstensen@gmail.com>
+Date:   Sun Mar 25 13:07:00 2018 +0200
+
+    Unconstify struct frontend pointer.
+    
+    Needs review.
+
+diff --git a/src/hitch.c b/src/hitch.c
+index cdfb6c6..115d67c 100644
+--- a/src/hitch.c
++++ b/src/hitch.c
+@@ -861,7 +861,7 @@ Find_issuer(X509 *subj, STACK_OF(X509) *chain)
+ 
+ /* Initialize an SSL context */
+ static sslctx *
+-make_ctx_fr(const struct cfg_cert_file *cf, const struct frontend *fr,
++make_ctx_fr(const struct cfg_cert_file *cf, struct frontend *fr,
+     const struct front_arg *fa)
+ {
+ 	SSL_CTX *ctx;
+@@ -1079,7 +1079,7 @@ insert_sni_names(sslctx *sc, sni_name **sn_tab)
+ }
+ 
+ static sslctx *
+-make_ctx(const struct cfg_cert_file *cf)
++make_ctx(struct cfg_cert_file *cf)
+ {
+ 	return (make_ctx_fr(cf, NULL, NULL));
+ }
